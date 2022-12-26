@@ -1,15 +1,14 @@
 package controllers
 
 import (
-	"net/http"
-	"os"
-	"time"
-
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/shakoor123/inititalizers"
 	"github.com/shakoor123/models"
 	"golang.org/x/crypto/bcrypt"
+	"net/http"
+	"os"
+	"time"
 )
 
 func SignUp(c *gin.Context) {

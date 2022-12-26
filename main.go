@@ -15,5 +15,14 @@ func main() {
 	r.POST("/api/signup", controllers.SignUp)
 	r.POST("/api/login", controllers.SignIn)
 	r.GET("/api/validate", middlewares.RequireAuth, controllers.Validate)
+
+	r.POST("/api/products", middlewares.RequireAuth, controllers.CreateProduct)
+	r.GET("/api/products", middlewares.RequireAuth, controllers.SelectAllProducts)
+	r.GET("/api/products/:id", middlewares.RequireAuth, controllers.SelectOneProduct)
+	r.DELETE("/api/products/:id", middlewares.RequireAuth, controllers.DeleteOneProduct)
+	r.PUT("/api/products/:id", middlewares.RequireAuth, controllers.UpdateOneProduct)
+
 	r.Run()
 }
+
+// https://github.com/gin-gonic/gin
