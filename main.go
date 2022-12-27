@@ -14,13 +14,13 @@ func main() {
 	r := gin.Default()
 	r.POST("/api/signup", controllers.SignUp)
 	r.POST("/api/login", controllers.SignIn)
-	r.GET("/api/validate", middlewares.RequireAuth, controllers.Validate)
+	r.GET("/api/validate", middlewares.IsAdmin, controllers.Validate)
 
-	r.POST("/api/products", middlewares.RequireAuth, controllers.CreateProduct)
+	r.POST("/api/products", middlewares.IsAdmin, controllers.CreateProduct)
 	r.GET("/api/products", middlewares.RequireAuth, controllers.SelectAllProducts)
 	r.GET("/api/products/:id", middlewares.RequireAuth, controllers.SelectOneProduct)
-	r.DELETE("/api/products/:id", middlewares.RequireAuth, controllers.DeleteOneProduct)
-	r.PUT("/api/products/:id", middlewares.RequireAuth, controllers.UpdateOneProduct)
+	r.DELETE("/api/products/:id", middlewares.IsAdmin, controllers.DeleteOneProduct)
+	r.PUT("/api/products/:id", middlewares.IsAdmin, controllers.UpdateOneProduct)
 
 	r.Run()
 }

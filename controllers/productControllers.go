@@ -11,7 +11,7 @@ import (
 func CreateProduct(c *gin.Context) {
 	type Data struct {
 		Title string
-		// Image    string
+		// Image    *multipart.FileHeader
 		Price    int
 		Category string
 		Color    string
@@ -19,13 +19,22 @@ func CreateProduct(c *gin.Context) {
 	}
 	var data Data
 
-	if c.Bind(&data) != nil {
+	if c.ShouldBind(&data) != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "product data not found	",
 		})
 		return
 	}
-	product := models.Product{Title: data.Title, Price: data.Price, Category: data.Category, Color: data.Color, Size: data.Size}
+	if c.ShouldBindUri(&data) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "product data not found	",
+		})
+		return
+	}
+	// file, _ := c.FormFile("image")
+	// c.SaveUploadedFile(file, "assets/"+file.Filename)
+
+	product := models.Product{Title: data.Title, Price: data.Price, Category: data.Category, Color: data.Color, Size: data.Size} //, Image: file.Filename
 	result := inititalizers.DB.Create(&product)
 	if result.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
