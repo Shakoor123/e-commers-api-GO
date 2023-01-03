@@ -14,6 +14,7 @@ func main() {
 	r := gin.Default()
 	r.POST("/api/signup", controllers.SignUp)
 	r.POST("/api/login", controllers.SignIn)
+	r.POST("/api/admin/login", controllers.AdminLogin)
 	r.GET("/api/validate", middlewares.IsAdmin, controllers.Validate)
 
 	r.POST("/api/products", middlewares.IsAdmin, controllers.CreateProduct)
