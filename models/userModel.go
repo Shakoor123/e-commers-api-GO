@@ -9,4 +9,8 @@ type User struct {
 	Email    string `gorm:"unique"`
 	Password string
 	Admin    bool
+	PhoneNo  int
+	Address  string
+	State    string
+	District string
 }

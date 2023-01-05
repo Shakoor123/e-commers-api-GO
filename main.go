@@ -23,6 +23,9 @@ func main() {
 	r.DELETE("/api/products/:id", middlewares.IsAdmin, controllers.DeleteOneProduct)
 	r.PUT("/api/products/:id", middlewares.IsAdmin, controllers.UpdateOneProduct)
 
+	r.POST("/api/watchlist", middlewares.RequireAuth, controllers.CreateWatchList)
+	r.GET("/api/watchlist/:id", middlewares.RequireAuth, controllers.SelectWatchlistOfUser)
+
 	r.Run()
 }
 
