@@ -40,8 +40,9 @@ func CreateWatchList(c *gin.Context) {
 
 func SelectWatchlistOfUser(c *gin.Context) {
 	uid := c.Param("id")
-	var watchLists []models.WatchList
-	result := inititalizers.DB.Where("id=?", uid).Find(&watchLists)
+
+	watchLists := []models.WatchList{}
+	result := inititalizers.DB.Where("uid=?", uid).Find(&watchLists)
 	if result.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "watchLists not found",
@@ -84,48 +85,3 @@ func RemoveAllWatchlist(c *gin.Context) {
 		"message": "Watchlists deleted successfully",
 	})
 }
-
-// func SelectOneProduct(c *gin.Context) {
-// 	id := c.Param("id")
-// 	var product models.Product
-// 	result := inititalizers.DB.First(&product, id)
-// 	if result.Error != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{
-// 			"error": "Product not found",
-// 		})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"data": product,
-// 	})
-// }
-
-// func UpdateOneProduct(c *gin.Context) {
-// 	id := c.Param("id")
-// 	var product models.Product
-// 	results := inititalizers.DB.First(&product, id)
-// 	if results.Error != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{
-// 			"error": "Product not found",
-// 		})
-// 		return
-// 	}
-
-// 	if c.Bind(&product) != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{
-// 			"message": "product data not found	",
-// 		})
-// 		return
-// 	}
-
-// 	result := inititalizers.DB.Save(&product)
-// 	if result.Error != nil {
-// 		c.JSON(http.StatusBadRequest, gin.H{
-// 			"err": "Not updated",
-// 		})
-// 		return
-// 	}
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"data": product,
-// 	})
-// }

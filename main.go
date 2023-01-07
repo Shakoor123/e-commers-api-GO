@@ -26,6 +26,8 @@ func main() {
 	r.POST("/api/watchlist", middlewares.RequireAuth, controllers.CreateWatchList)
 	r.GET("/api/watchlist/:id", middlewares.RequireAuth, controllers.SelectWatchlistOfUser)
 
+	r.POST("/api/cart/:id", middlewares.RequireAuth, controllers.CreateUserCart)
+
 	r.Run()
 }
 
