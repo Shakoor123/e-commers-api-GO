@@ -27,7 +27,9 @@ func main() {
 	r.GET("/api/watchlist/:id", middlewares.RequireAuth, controllers.SelectWatchlistOfUser)
 
 	r.POST("/api/cart/:id", middlewares.RequireAuth, controllers.CreateUserCart)
-
+	r.DELETE("/api/cart/:id", middlewares.RequireAuth, controllers.RemoveCartItem)
+	r.DELETE("/api/cart/all/:id", middlewares.RequireAuth, controllers.RemoveOneUserCart)
+	r.GET("/api/cart/:id", middlewares.RequireAuth, controllers.SelectCartOfUser)
 	r.Run()
 }
 
