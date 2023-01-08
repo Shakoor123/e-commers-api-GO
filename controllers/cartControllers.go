@@ -128,15 +128,32 @@ func SelectCartOfUser(c *gin.Context) {
 		})
 		return
 	}
-	cartItems := []models.CartItems{}
-	result = inititalizers.DB.Where("user_id=?", uid).Find(&cartItems)
+	// cartItems := []models.CartItems{}
+	products := []models.Product{}
+	// result = inititalizers.DB.Where("user_id=?", uid).Find(&cartItems)
+	type Ids struct {
+		ProductId int
+		Count     int
+	}
+	ids := []Ids{}
+	sub := inititalizers.DB.Model(&models.CartItems{}).Select("product_id,count").Where("user_id = ?", uid).Find(&ids)
+	if sub.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "products1 not found",
+			"data":  ids,
+		})
+		return
+	}
+	result = inititalizers.DB.Where("id IN ?", []int{15, 16}).Find(&products)
+	//SELECT * FROM products WHERE id IN (SELECT product_id FROM cart_items WHERE user_id = "2");
 	if result.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "watchLists not found",
+			"error": "products2 not found",
+			"data":  ids,
 		})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"data": cartItems,
+		"data": ids,
 	})
 }
