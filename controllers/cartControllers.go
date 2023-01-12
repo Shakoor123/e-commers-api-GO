@@ -115,6 +115,7 @@ func RemoveOneUserCart(c *gin.Context) {
 func SelectCartOfUser(c *gin.Context) {
 	uid := c.Param("id")
 	var cart models.Cart
+	// selcting User cart
 	result := inititalizers.DB.Where("user_id=?", uid).Find(&cart)
 	if result.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -128,14 +129,13 @@ func SelectCartOfUser(c *gin.Context) {
 		})
 		return
 	}
-	// cartItems := []models.CartItems{}
 	products := []models.Product{}
-	// result = inititalizers.DB.Where("user_id=?", uid).Find(&cartItems)
 	type Ids struct {
 		ProductId int
 		Count     int
 	}
 	ids := []Ids{}
+	//selecting cart items ids
 	sub := inititalizers.DB.Model(&models.CartItems{}).Select("product_id,count").Where("user_id = ?", uid).Find(&ids)
 	if sub.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -144,8 +144,14 @@ func SelectCartOfUser(c *gin.Context) {
 		})
 		return
 	}
-	result = inititalizers.DB.Where("id IN ?", []int{15, 16}).Find(&products)
-	//SELECT * FROM products WHERE id IN (SELECT product_id FROM cart_items WHERE user_id = "2");
+	//assigning only ids for selecting products details
+	var arrLeng int = len(ids)
+	var productIds = make([]int, arrLeng)
+	for i := 0; i < arrLeng; i++ {
+		productIds[i] = ids[i].ProductId
+	}
+	//selecting products using ids
+	result = inititalizers.DB.Where("id IN ?", productIds).Find(&products)
 	if result.Error != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "products2 not found",
@@ -153,7 +159,9 @@ func SelectCartOfUser(c *gin.Context) {
 		})
 		return
 	}
+	// Respond giving products and its Counts
 	c.JSON(http.StatusOK, gin.H{
-		"data": ids,
+		"data":          products,
+		"productCounts": ids,
 	})
 }
