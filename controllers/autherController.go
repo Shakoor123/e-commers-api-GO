@@ -51,7 +51,7 @@ func CreateUserOrder(c *gin.Context) {
 	}
 	var arrLeng int = len(ids)
 	for i := 0; i < arrLeng; i++ {
-		orderItem := models.OrderItems{UserId: ids[i].UserId, ProductId: ids[i].ProductId, Count: ids[i].Count, OderId: order.ID}
+		orderItem := models.OrderItems{UserId: ids[i].UserId, ProductId: ids[i].ProductId, Count: ids[i].Count, OderId: int(order.ID)}
 		result = inititalizers.DB.Create(&orderItem)
 		if result.Error != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
@@ -63,6 +63,5 @@ func CreateUserOrder(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"data": order,
-		"ids":  ids,
 	})
 }
