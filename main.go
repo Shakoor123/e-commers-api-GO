@@ -30,6 +30,12 @@ func main() {
 	r.DELETE("/api/cart/:id", middlewares.RequireAuth, controllers.RemoveCartItem)
 	r.DELETE("/api/cart/all/:id", middlewares.RequireAuth, controllers.RemoveOneUserCart)
 	r.GET("/api/cart/:id", middlewares.RequireAuth, controllers.SelectCartOfUser)
+
+	r.POST("/api/order/:cartid", middlewares.RequireAuth, controllers.CreateUserOrder)
+	// r.DELETE("/api/cart/:id", middlewares.RequireAuth, controllers.RemoveCartItem)
+	// r.DELETE("/api/cart/all/:id", middlewares.RequireAuth, controllers.RemoveOneUserCart)
+	// r.GET("/api/cart/:id", middlewares.RequireAuth, controllers.SelectCartOfUser)
+
 	r.Run()
 }
 

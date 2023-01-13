@@ -7,4 +7,5 @@ type OrderItems struct {
 	UserId    int
 	ProductId int
 	Count     int
+	OderId    int
 }

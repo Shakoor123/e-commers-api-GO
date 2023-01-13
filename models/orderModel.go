@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Order struct {
 	gorm.Model
-	Uid    int
+	UserId int
 	Total  int
 	Status int
 }
