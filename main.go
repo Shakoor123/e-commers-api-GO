@@ -32,9 +32,8 @@ func main() {
 	r.GET("/api/cart/:id", middlewares.RequireAuth, controllers.SelectCartOfUser)
 
 	r.POST("/api/order/:cartid", middlewares.RequireAuth, controllers.CreateUserOrder)
-	// r.DELETE("/api/cart/:id", middlewares.RequireAuth, controllers.RemoveCartItem)
-	// r.DELETE("/api/cart/all/:id", middlewares.RequireAuth, controllers.RemoveOneUserCart)
-	// r.GET("/api/cart/:id", middlewares.RequireAuth, controllers.SelectCartOfUser)
+	r.PUT("/api/order/:orderid", middlewares.IsAdmin, controllers.ChangeOrderStatus)
+	r.GET("/api/order/:id", middlewares.RequireAuth, controllers.SelectUserOrder)
 
 	r.Run()
 }

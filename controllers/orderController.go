@@ -65,3 +65,51 @@ func CreateUserOrder(c *gin.Context) {
 		"data": order,
 	})
 }
+
+//change order status
+
+func ChangeOrderStatus(c *gin.Context) {
+	orderid := c.Param("orderid")
+	var order models.Order
+	result := inititalizers.DB.Where("id=?", orderid).Find(&order)
+	if result.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "order is Not found",
+		})
+		return
+	}
+	if order.Status > 3 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "order is max statused",
+		})
+		return
+	}
+	order.Status = order.Status + 1
+	result = inititalizers.DB.Save(&order)
+	if result.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "order status is Not Changed",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"data": order,
+	})
+}
+
+// SElect User orders
+
+func SelectUserOrder(c *gin.Context) {
+	uid := c.Param("id")
+	orders := []models.Order{}
+	result := inititalizers.DB.Where("user_id=?", uid).Find(&orders)
+	if result.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"err": "order is Not found",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"data": orders,
+	})
+}
