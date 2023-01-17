@@ -19,7 +19,8 @@ func main() {
 
 	r.POST("/api/products", middlewares.IsAdmin, controllers.CreateProduct)
 	r.GET("/api/products", middlewares.RequireAuth, controllers.SelectAllProducts)
-	r.GET("/api/products/:id", middlewares.RequireAuth, controllers.SelectOneProduct)
+	r.GET("/api/products/*key&value", middlewares.RequireAuth, controllers.SelectCategoryProducts)
+	r.GET("/api/product/:id", middlewares.RequireAuth, controllers.SelectOneProduct)
 	r.DELETE("/api/products/:id", middlewares.IsAdmin, controllers.DeleteOneProduct)
 	r.PUT("/api/products/:id", middlewares.IsAdmin, controllers.UpdateOneProduct)
 

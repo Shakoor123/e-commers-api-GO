@@ -119,3 +119,46 @@ func UpdateOneProduct(c *gin.Context) {
 		"data": product,
 	})
 }
+
+//select one category prodects
+
+func SelectCategoryProducts(c *gin.Context) {
+	key := c.Request.URL.Query().Get("key")
+	value := c.Request.URL.Query().Get("value")
+
+	products := []models.Product{}
+	if key == "category" {
+		result := inititalizers.DB.Where("category=?", value).Find(&products)
+		if result.Error != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "Products not found",
+			})
+			return
+		}
+	} else if key == "size" {
+		result := inititalizers.DB.Where("size=?", value).Find(&products)
+		if result.Error != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "Products not found",
+			})
+			return
+		}
+	} else if key == "color" {
+		result := inititalizers.DB.Where("color=?", value).Find(&products)
+		if result.Error != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "Products not found",
+			})
+			return
+		}
+	} else {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Products not found",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": products,
+	})
+}
