@@ -1,14 +1,16 @@
 package controllers
 
 import (
+	"fmt"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/shakoor123/inititalizers"
 	"github.com/shakoor123/models"
 	"golang.org/x/crypto/bcrypt"
-	"net/http"
-	"os"
-	"time"
 )
 
 func SignUp(c *gin.Context) {
@@ -58,6 +60,7 @@ func SignIn(c *gin.Context) {
 		})
 		return
 	}
+	fmt.Print(body)
 	//select user from db
 	var user models.User
 	inititalizers.DB.First(&user, "email=?", body.Email)
