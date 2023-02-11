@@ -12,9 +12,11 @@ func main() {
 	inititalizers.ConnectToDB()
 	inititalizers.SyncDatabase()
 	r := gin.Default()
+
+	r.Use(middlewares.CORSMiddleware())
+
 	r.POST("/api/signup", controllers.SignUp)
-	// r.POST("/api/login", controllers.SignIn)
-	r.POST("/api/login", middlewares.CORSMiddleware(), controllers.SignIn)
+	r.POST("/api/login", controllers.SignIn)
 	r.POST("/api/admin/login", controllers.AdminLogin)
 	r.GET("/api/validate", middlewares.IsAdmin, controllers.Validate)
 
@@ -37,18 +39,15 @@ func main() {
 	r.PUT("/api/order/:orderid", middlewares.IsAdmin, controllers.ChangeOrderStatus)
 	r.GET("/api/order/:id", middlewares.RequireAuth, controllers.SelectUserOrder)
 
-	r.Use(func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "content-type")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE")
-
-		if c.Request.Method == "OPTIONS" {
-			c.AbortWithStatus(204)
-			return
-		}
-		return
-	})
+	// r.Use(func(c *gin.Context) {
+	// 	if c.Request.Method == "OPTIONS" {
+	// 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+	// 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE")
+	// 		c.Writer.Header().Set("Access-Control-Allow-Headers", "content-type")
+	// 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+	// 		c.AbortWithStatus(204)
+	// 	}
+	// })
 
 	r.Run()
 }
