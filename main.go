@@ -1,9 +1,6 @@
 package main
 
 import (
-	"time"
-
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/shakoor123/controllers"
 	"github.com/shakoor123/inititalizers"
@@ -15,6 +12,9 @@ func main() {
 	inititalizers.ConnectToDB()
 	inititalizers.SyncDatabase()
 	r := gin.Default()
+
+	r.Use(middlewares.CORSMiddleware())
+
 	r.POST("/api/signup", controllers.SignUp)
 	r.POST("/api/login", controllers.SignIn)
 	r.POST("/api/admin/login", controllers.AdminLogin)
@@ -39,17 +39,16 @@ func main() {
 	r.PUT("/api/order/:orderid", middlewares.IsAdmin, controllers.ChangeOrderStatus)
 	r.GET("/api/order/:id", middlewares.RequireAuth, controllers.SelectUserOrder)
 
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"PUT", "PATCH", "POST", "GET"},
-		AllowHeaders:     []string{"origin", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		AllowOriginFunc: func(origin string) bool {
-			return origin == "*"
-		},
-		MaxAge: 12 * time.Hour,
-	}))
+	// r.Use(func(c *gin.Context) {
+	// 	if c.Request.Method == "OPTIONS" {
+	// 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+	// 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE")
+	// 		c.Writer.Header().Set("Access-Control-Allow-Headers", "content-type")
+	// 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+	// 		c.AbortWithStatus(204)
+	// 	}
+	// })
+
 	r.Run()
 }
 
